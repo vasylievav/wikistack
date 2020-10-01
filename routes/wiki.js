@@ -1,16 +1,18 @@
 const express = require('express');
 const { Page } = require('../models');
 const addPage = require('../views/addPage');
+const main = require('../views/main');
 const wikipage = require('../views/wikipage');
 const wikiRouter= express.Router();
 
-wikiRouter.get ('/',  (req,res,next)=>{
-  // try{
-  //   const allPages = await Page.findAll();
-  //   console.log ('aallPages=', allPages)
-
-  // } catch(error) {next(error)}
-  res.send('WIKI PAGE')
+wikiRouter.get ('/',  async (req,res,next)=>{
+  try{
+    const allPages = await Page.findAll();
+    //console.log ('allPages.page.dataValues', allPages[0].dataValues);
+    res.send(main(allPages))
+  } catch(error) {
+    next(error)
+  }
 });
 
 wikiRouter.post ('/', async (req,res,next)=>{
