@@ -1,6 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
 const { db ,Page,User } =require ('./models');
+const wikiRouter = require ('./routes/wiki');
+const userRouter = require ('./routes/users'); 
+
 
 const app =express();
 const router = express.Router();
@@ -9,8 +12,15 @@ const PORT =3000;
 app.use(morgan("dev"));
 app.use(express.urlencoded({extended:false}));
 app.use(express.static("./static"));
-app.use(router);
+app.use(express.json());
+//app.use('/',router);
 
+app.get ('/', (req,res,next)=>{
+  res.redirect('/wiki')
+});
+
+app.use('/wiki',wikiRouter);
+app.use('users', userRouter);
 
 db.authenticate()
   .then(() => {
